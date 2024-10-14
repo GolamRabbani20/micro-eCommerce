@@ -1,6 +1,6 @@
 scripts:
   server: cd src && python manage.py runserver
-  migrate: cd src && python manage.py migrate
+  migrate: cd src && python manage.py makemigrations && python manage.py migrate 
   freeze: venv/bin/python -m pip freeze
   watch: npx tailwindcss -i ./src/static/tailwind/tailwind-input.css -o ./src/static/css/output.css --watch
   installs:

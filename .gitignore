@@ -261,3 +261,8 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+
+#gro-add
+info.txt
+local-cdn/
