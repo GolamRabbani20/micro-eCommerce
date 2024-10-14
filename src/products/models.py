@@ -29,6 +29,13 @@ class Product(models.Model):
             self.stripe_price = int(self.price * 100)
             self.price_changed_timestamp = timezone.now()
         super().save(*args, **kwargs)
+
+    @property
+    def display_name(self):
+        return self.name
+    
+    def __str__(self):
+        return self.display_name
     
     def get_absolute_url(self):
         return f"/products/{self.handle}/"
