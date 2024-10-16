@@ -3,16 +3,17 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .models import Product, ProductAttachment
 from .forms import ProductForm, ProductUpdateForm, ProductAttachmentInlinelFormset
 from django.http import FileResponse, HttpResponseBadRequest
+from django.urls import reverse
 
 def product_create_view(request):
     user = request.user
-    form = ProductForm(request.POST or None)
+    form = ProductForm(request.POST or None, request.FILES or None)
     if form.is_valid():
         obj = form.save(commit=False)
         if user.is_authenticated:
             obj.user = user
             obj.save()
-            return redirect('list')
+            return redirect(obj.get_absolute_url('list'))
         form.add_error(None,'You must be logged in to create product!')
     return render(request, 'products/create.html', {'form': form})
 
@@ -53,7 +54,7 @@ def product_manage_detail_view(request, handle=None):
                 if attachment_obj is not None:
                     attachment_obj.product = instance
                     attachment_obj.save()
-        return redirect('list')
+        return redirect(obj.get_absolute_url())
     context['form'] = form
     context['formset'] = formset
     return render(request, 'products/manager.html', context)
@@ -63,8 +64,11 @@ def product_detail_view(request, handle=None):
     attachments = ProductAttachment.objects.filter(product=obj)
     # attachments = obj.productattachment_set.all() # it's a property of foreginkey
     # print(obj.user, request.user)
-
-    is_owner = True if (request.user.is_authenticated and obj.user == request.user) else False
+    is_owner=False
+    if request.user.is_authenticated and obj.user == request.user:
+        is_owner = True
+        # is_owner = request.user.purchasesproduct_set.all().filter(product=obj, completed=True).exists()
+        
     can_access = True if request.user.is_authenticated else False
 
     context = {'object': obj,'is_owner': is_owner, 'attachments': attachments, 'can_access': can_access}
