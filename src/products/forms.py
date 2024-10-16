@@ -7,7 +7,7 @@ input_css_class = 'form-control'
 class ProductForm(forms.ModelForm):
     class Meta:
         model = Product
-        fields = ['name', 'handle', 'price', 'image']
+        fields = ['name', 'handle', 'description', 'price', 'image']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

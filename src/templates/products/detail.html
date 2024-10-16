@@ -3,41 +3,22 @@
 {% block content %}
 <div class="flex flex-col lg:flex-row">
     <div class="w-full md:w-3/4 space-y-4">
-        <!--Main content-->
         <h2 class="text-4xl font-bold dark:text-white">{{object.name}}</h2>
         <p class="mb-3 text-gray-500 dark:text-gray-400 first-line:uppercase first-line:tracking-widest first-letter:text-7xl first-letter:font-bold first-letter:text-gray-900 dark:first-letter:text-gray-100 first-letter:me-3 first-letter:float-start">Track work across the enterprise through an open, collaborative platform. Link issues across Jira and ingest data from other software development tools, so your IT support and operations teams have richer contextual information to rapidly respond to requests, incidents, and changes.</p>
         <p class="text-gray-500 dark:text-gray-400">Deliver great service experiences fast - without the complexity of traditional ITSM solutions.Accelerate critical development work, eliminate toil, and deploy changes with ease, with a complete audit trail for every change.</p>
   
         {% include 'products/attachments-table.html' with attachments=attachments can_access=can_access %}
-       
     </div> 
 
     <div class="w-full md:w-1/4 space-y-4">
-        <!--Sidebar-->
+        {% if is_owner %}
+            <h4 class="text-purple-600">You are the owner of this product</h4>
+        {% else %}
+            {% include 'purchases/buy-btn-form.html' with product=object %}
+        {% endif %}
+
         <div class="w-full max-w-sm p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-8 dark:bg-gray-800 dark:border-gray-700 space-y-4">
-            {% if is_owner %}
-                <p>You are the owner of this product</p>
-            {% else %}
-                <div class="flex items-baseline text-gray-900 dark:text-white">
-                    <span class="text-3xl font-semibold">$</span>
-                    <span class="text-5xl font-extrabold tracking-tight">{{object.price}}</span>
-                </div>
-                
-                <button type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center me-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Buy now
-                </button>
-            {% endif %}
-                {% include 'products/preview.html' with product=object %}
-            {% if form %}
-            <div>
-                <h3>Update Product</h3>
-                <form method="POST" action="." enctype="multipart/form-data">
-                    {% csrf_token %}
-                    {{form.as_p}}
-                    <p class="text-white">.</p>
-                    <button type="submit" class="btn-submit">Submit</button>
-                </form>
-            </div>
-            {% endif %}
+            {% include 'products/preview.html' with product=object %}
         </div>
     </div>
 </div>
