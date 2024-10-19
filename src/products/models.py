@@ -111,4 +111,3 @@ class ProductAttachment(models.Model):
 
     def get_manage_url(self):
         return reverse('products:manage', kwargs={'handle': self.product.handle})
-        
