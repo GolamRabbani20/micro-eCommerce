@@ -43,6 +43,9 @@ INSTALLED_APPS = [
     #Internal Apps
     'products',
     'purchases',
+    
+    #third party api
+    'storages'
 ]
 
 MIDDLEWARE = [
@@ -122,6 +125,9 @@ STATIC_ROOT = BASE_DIR.parent / "local-cdn" / "static"
 STATIC_URL = 'media/'
 MEDIA_ROOT = BASE_DIR.parent / "local-cdn" / "media"
 PROTECTED_MEDIA_ROOT = BASE_DIR.parent / "local-cdn" / "protected"
+
+from home.storages.conf import *
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field

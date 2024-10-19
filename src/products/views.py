@@ -1,13 +1,37 @@
 import mimetypes
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Product, ProductAttachment
+from purchases.models import purchasesProduct
 from .forms import ProductForm, ProductUpdateForm, ProductAttachmentInlinelFormset
-from django.http import FileResponse, HttpResponseBadRequest
+from django.http import FileResponse, HttpResponseBadRequest, HttpResponseRedirect
 from django.urls import reverse
 
+import boto3
+from django.conf import settings
+from home.storages.utils import generate_presigned_url
+
 def product_create_view(request):
+    if request.method == 'POST' and 'image' in request.FILES:
+        file = request.FILES['image']
+
+        # Initialize the S3 client
+        s3 = boto3.client(
+            's3',
+            aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
+            aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
+            region_name=settings.AWS_S3_REGION_NAME,
+        )
+
+        # Upload the file
+        s3.upload_fileobj(
+            file,
+            settings.AWS_STORAGE_BUCKET_NAME,
+            file.name,
+            ExtraArgs={'ContentType': file.content_type}  # Preserve content type
+        )
+
     user = request.user
-    form = ProductForm(request.POST or None, request.FILES or None)
+    form = ProductForm(request.POST or None)
     if form.is_valid():
         obj = form.save(commit=False)
         if user.is_authenticated:
@@ -78,14 +102,17 @@ def product_attachment_download_view(request, handle=None, pk=None):
     attachment = get_object_or_404(ProductAttachment, product__handle=handle, pk=pk)
     can_download = attachment.is_free or False
     can_download = True if request.user.is_authenticated else False
+    if request.user.is_authenticated and can_download is False:
+        can_download = request.user.purchasesproduct_set.all().filter(product=attachment.product, completed=True).exists()
     if can_download is False:
         return HttpResponseBadRequest()
-    file = attachment.file.open(mode='rb') #readbyte
-    filename = attachment.file.name
-    content_type, _ = mimetypes.guess_type(filename)
-    response = FileResponse(file)
-    response['Conten-Type'] = content_type or 'application/octet-stream'
-    response['Content-Disposition'] = f'attachment;filename={filename}'
-    return response
+    file_name = attachment.file.name  #.open(mode='rb') #readbyte
+    file_url = generate_presigned_url(file_name)
+    # filename = attachment.file.name
+    # content_type, _ = mimetypes.guess_type(filename)
+    # response = FileResponse(file)
+    # response['Conten-Type'] = content_type or 'application/octet-stream'
+    # response['Content-Disposition'] = f'attachment;filename={filename}'
+    return HttpResponseRedirect(file_url)
 
 

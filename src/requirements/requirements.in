@@ -4,3 +4,5 @@ python-decouple
 psycopg2
 pillow
 stripe
+boto3
+django-storages
