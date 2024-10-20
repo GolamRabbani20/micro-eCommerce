@@ -13,7 +13,6 @@ from home.storages.utils import generate_presigned_url
 def product_create_view(request):
     if request.method == 'POST' and 'image' in request.FILES:
         file = request.FILES['image']
-
         # Initialize the S3 client
         s3 = boto3.client(
             's3',

@@ -6,3 +6,5 @@ pillow
 stripe
 boto3
 django-storages
+waitress
+gunicorn
