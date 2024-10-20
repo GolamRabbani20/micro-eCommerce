@@ -4,6 +4,10 @@
 #
 #    pip-compile --output-file=src/requirements.txt src/requirements/requirements.in
 #
+algoliasearch==3.0.0
+    # via algoliasearch-django
+algoliasearch-django==3.0.0
+    # via -r src/requirements/requirements.in
 asgiref==3.8.1
     # via django
 boto3==1.35.42
@@ -21,6 +25,7 @@ dj-database-url==2.2.0
 django==5.1.2
     # via
     #   -r src/requirements/requirements.in
+    #   algoliasearch-django
     #   dj-database-url
     #   django-storages
 django-storages==1.14.4
@@ -44,7 +49,9 @@ python-dateutil==2.9.0.post0
 python-decouple==3.8
     # via -r src/requirements/requirements.in
 requests==2.32.3
-    # via stripe
+    # via
+    #   algoliasearch
+    #   stripe
 s3transfer==0.10.3
     # via boto3
 six==1.16.0

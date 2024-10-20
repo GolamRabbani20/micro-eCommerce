@@ -10,6 +10,9 @@ import boto3
 from django.conf import settings
 from home.storages.utils import generate_presigned_url
 
+def serchproduct_view(request):
+    return render(request, 'search/index.html', {})
+
 def product_create_view(request):
     if request.method == 'POST' and 'image' in request.FILES:
         file = request.FILES['image']

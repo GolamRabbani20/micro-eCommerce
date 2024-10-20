@@ -48,7 +48,8 @@ INSTALLED_APPS = [
     'purchases',
     
     #third party api
-    'storages'
+    'storages',
+    'algoliasearch_django'
 ]
 
 MIDDLEWARE = [
@@ -136,3 +137,9 @@ from home.storages.conf import *
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+ALGOLIA = {
+  'APPLICATION_ID': 'GTFNIG7UXS',
+  'API_KEY': '8fa2ecbe6c1fcada7596a23ce2d85a97',
+  'INDEX_PREFIX': 'gro'
+}

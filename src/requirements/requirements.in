@@ -8,3 +8,4 @@ boto3
 django-storages
 waitress
 gunicorn
+algoliasearch-django>=3.0,<4.0
