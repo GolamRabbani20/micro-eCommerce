@@ -25,12 +25,16 @@ django==5.1.2
     #   django-storages
 django-storages==1.14.4
     # via -r src/requirements/requirements.in
+gunicorn==23.0.0
+    # via -r src/requirements/requirements.in
 idna==3.10
     # via requests
 jmespath==1.0.1
     # via
     #   boto3
     #   botocore
+packaging==24.1
+    # via gunicorn
 pillow==10.4.0
     # via -r src/requirements/requirements.in
 psycopg2==2.9.9
@@ -59,3 +63,5 @@ urllib3==2.2.3
     # via
     #   botocore
     #   requests
+waitress==3.0.0
+    # via -r src/requirements/requirements.in
